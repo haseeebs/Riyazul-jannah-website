@@ -171,7 +171,7 @@ const HotelForm = () => {
     };
 
     return (
-        <div className="mx-auto max-w-7xl p-6">
+        <div className="mx-auto max-w-7xl min-h-screen pt-28 p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="rounded-3xl border border-lime-200 bg-white shadow-lg">
                     <div className="border-b border-lime-100 p-4">

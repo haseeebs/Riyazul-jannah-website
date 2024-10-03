@@ -115,7 +115,7 @@ const AdminNotifications = () => {
     const inactiveNotifications = notifications.filter(notif => !notif.isActive);
 
     return (
-        <div className="max-w-xl mx-auto p-6">
+        <div className="max-w-xl mx-auto p-6 min-h-screen pt-28">
             <h2 className="text-2xl font-bold text-lime-800 mb-6">Add New Notification</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
