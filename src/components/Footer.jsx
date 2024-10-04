@@ -65,7 +65,7 @@ const Footer = () => {
                 <h2 id="footer-heading" className="sr-only">
                     Footer
                 </h2>
-                <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:py-20">
+                <div className="mx-auto container px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:py-20">
                     <div className="xl:grid xl:grid-cols-2 xl:gap-8">
                         {/* section one */}
                         <div className="space-y-8 max-w-lg">

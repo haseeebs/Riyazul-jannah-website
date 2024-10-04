@@ -12,7 +12,7 @@ const NotFoundPage = () => {
                         <div className="w-full h-full bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 animate-gradient-x"></div>
                     )}
                     <img
-                        className={`w-full h-full object-cover bg-center transition-opacity duration-700 ${
+                        className={`absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-700 ${
                             isImageLoaded ? 'opacity-100' : 'opacity-0'
                         }`}
                         src={packageServices.getFilePreview('67532310001c18214f1d')}

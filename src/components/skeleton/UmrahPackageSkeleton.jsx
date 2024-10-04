@@ -1,7 +1,7 @@
 const UmrahPackageSkeleton = () => {
   return (
-    <div className="bg-lime-50">
-      <div className="min-h-screen mx-auto max-w-7xl py-0 lg:py-10 bg-lime-50">
+    <div className="bg-lime-50 pt-24">
+      <div className="min-h-screen mx-auto container py-0 lg:py-10 bg-lime-50">
         {/* Hero Section Skeleton */}
         <div className="relative overflow-hidden bg-gray-300 px-6 py-24 sm:py-32 lg:px-8 rounded-none lg:rounded-3xl animate-pulse">
           <div className="mx-auto max-w-2xl text-center relative z-10">
@@ -12,7 +12,7 @@ const UmrahPackageSkeleton = () => {
 
         {/* Packages Comparison Skeleton */}
         <div className="py-10">
-          <div className="mx-auto max-w-7xl bg-lime-400 px-4 py-4 rounded-3xl">
+          <div className="mx-auto container bg-lime-400 px-4 py-4 rounded-3xl">
             <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
               <div className="h-6 bg-gray-300 rounded w-3/4 mx-auto"></div>
             </div>
@@ -21,7 +21,7 @@ const UmrahPackageSkeleton = () => {
 
         {/* Why Choose Us Section Skeleton */}
         <section className="py-0 pt-12 lg:py-32 px-4 sm:px-6 lg:px-8 flex items-center">
-          <div className="max-w-7xl mx-auto w-full">
+          <div className="container mx-auto w-full">
             <div className="text-center mb-16">
               <div className="h-10 bg-gray-300 rounded w-1/2 mx-auto mb-4"></div>
               <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto"></div>

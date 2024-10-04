@@ -7,7 +7,7 @@ const stats = [
 const SimpleState = () => {
     return (
         <div className="relative py-16 sm:py-24 bg-lime-50 z-10 backdrop-filter backdrop-blur-sm">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto container px-6 lg:px-8">
                 <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                     {stats.map((stat) => (
                         <div key={stat.id} className="mx-auto flex max-w-xs flex-col gap-y-4">

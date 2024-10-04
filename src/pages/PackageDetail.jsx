@@ -160,7 +160,7 @@ const PackageDetail = () => {
       <header
         className={`w-full bg-white shadow-md transition-all duration-300 py-4'}`}
       >
-        <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-6 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
             className="flex items-center text-lime-600 hover:text-lime-700 font-medium"
@@ -177,7 +177,7 @@ const PackageDetail = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-8 pb-24">
+      <main className="container mx-auto px-4 py-8 space-y-8 pb-24">
         {/* Package Summary */}
         <div className="bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl p-6 text-white shadow-lg">
           <div className={`grid ${currentPackage.travelDate ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>

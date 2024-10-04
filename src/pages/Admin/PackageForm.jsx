@@ -313,7 +313,7 @@ const PackageForm = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-6 min-h-screen pt-28">
+    <div className="mx-auto container p-6 min-h-screen pt-28">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="rounded-3xl border border-lime-200 bg-white shadow-lg">
           <div className="border-b border-lime-100 p-4">

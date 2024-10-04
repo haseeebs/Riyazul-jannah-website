@@ -24,7 +24,7 @@ const WhyChooseUs = () => {
 
   return (
     <section className="py-0 pt-12 lg:py-32 px-4 sm:px-6 lg:px-8 flex items-center">
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="container mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-5xl font-extrabold text-lime-600 mb-4 tracking-tight">
             Why Choose Our Packages?

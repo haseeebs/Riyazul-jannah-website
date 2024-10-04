@@ -25,7 +25,7 @@ const Packages = () => {
 
     if (!uniquePackages || uniquePackages.length === 0) {
         return (
-            <div className="mx-auto max-w-7xl p-4 bg-white rounded-3xl">
+            <div className="mx-auto container p-4 bg-white rounded-3xl">
                 <h2 className="text-center text-gray-600 text-xl font-semibold">
                     No packages found at the moment. Please check back later.
                 </h2>
@@ -34,7 +34,7 @@ const Packages = () => {
     }
 
     return (
-        <div className="mx-auto max-w-7xl p-1 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
+        <div className="mx-auto container p-1 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
             <div className="bg-white rounded-3xl p-8">
                 <h2 className="text-lime-600 text-3xl font-bold text-center mb-12">
                     Our Popular Packages for Every Budget

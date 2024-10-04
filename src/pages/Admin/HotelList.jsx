@@ -67,7 +67,7 @@ const HotelList = () => {
     };
 
     return (
-        <div className="mx-auto max-w-7xl p-6 min-h-screen pt-28">
+        <div className="mx-auto container p-6 min-h-screen pt-28">
             <div className="rounded-3xl border border-lime-200 bg-white shadow-lg">
                 <div className="border-b border-lime-100 p-4">
                     <h2 className="text-2xl text-lime-800">Hotel List</h2>

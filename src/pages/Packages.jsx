@@ -8,7 +8,7 @@ const Packages = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
-    <div className="min-h-screen mx-auto max-w-7xl py-0 lg:py-10 lg:pt-28 bg-lime-50">
+    <div className="min-h-screen mx-auto container py-0 lg:py-10 lg:pt-28 bg-lime-50">
       {/* Hero Section */}
       <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-32 lg:px-8 rounded-none lg:rounded-3xl">
         {/* Gradient Placeholder */}

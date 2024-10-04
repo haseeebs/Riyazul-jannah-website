@@ -29,7 +29,7 @@ const CustomizePackageDetails = ({ packageDetail }) => {
     ) || [];
 
     return (
-        <div className="max-w-7xl mx-auto p-4">
+        <div className="container mx-auto p-4">
             <div className="bg-white shadow-md rounded-lg overflow-hidden mb-8">
                 <div className="p-6">
                     <h2 className="text-2xl font-bold mb-2">Package Details</h2>

@@ -11,7 +11,7 @@ const CardSkeleton = () => (
 
 const PackagesSkeleton = () => {
   return (
-    <div className="mx-auto max-w-7xl p-1 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
+    <div className="mx-auto container p-1 pt-28 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
       <div className="bg-white rounded-3xl p-8">
         <div className="h-10 bg-gray-200 rounded w-3/4 mx-auto mb-12"></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

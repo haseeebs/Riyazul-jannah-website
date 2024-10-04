@@ -7,6 +7,7 @@ import HajjUmrahPackageSkeleton from '../components/skeleton/HajjUmrahPackageSke
 import NotFoundPage from '../pages/NotFoundPage';
 import LazyWrapper from '../components/LazyWrapper';
 import PrivateRoute from '../pages/PrivateRoute';
+import PackageFormSkeleton from '../components/skeleton/PackageFormSkeleton';
 
 // Lazy imports
 const Layout = lazy(() => import('../pages/Layout'));
@@ -74,11 +75,19 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: 'create-package',
-                        element: <LazyWrapper><PackageForm /></LazyWrapper>
+                        element: (
+                            <Suspense fallback={<PackageFormSkeleton />}>
+                                <PackageForm />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: 'edit-package/:id',
-                        element: <LazyWrapper><PackageForm /></LazyWrapper>
+                        element: (
+                            <Suspense fallback={<PackageFormSkeleton />}>
+                                <PackageForm />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: 'create-hotel',

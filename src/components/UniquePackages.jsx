@@ -38,7 +38,7 @@ const UniquePackages = () => {
 
     if (!uniquePackages || uniquePackages.length === 0) {
         return (
-            <div className="mx-auto max-w-7xl p-4 bg-lime-50 rounded-3xl">
+            <div className="mx-auto container p-4 bg-lime-50 rounded-3xl">
                 <h2 className="text-center text-gray-600 text-xl font-semibold">
                     No packages found at the moment. Please check back later.
                 </h2>
@@ -47,7 +47,7 @@ const UniquePackages = () => {
     }
 
     return (
-        <div className="mx-auto max-w-7xl p-1 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
+        <div className="mx-auto container p-1 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
             <div className="bg-lime-50 rounded-3xl p-4 lg:p-8">
                 <h2 className="text-lime-600 text-3xl font-bold text-center mb-12">
                     Our Popular Packages for Every Budget
@@ -68,7 +68,7 @@ const UniquePackages = () => {
                 </div>
 
             <div className="bg-lime-50">
-                <div className="max-w-7xl mx-auto px-4 pt-12 pb-5">
+                <div className="container mx-auto px-4 pt-12 pb-5">
                     <div className="grid md:grid-cols-2 gap-8">
                         <OfferCard
                             title="Flexible Budget to Luxury Packages"

@@ -10,7 +10,7 @@ const Hero = () => {
     return (
         <div>
             {/* Hero Section */}
-            <div className={`relative w-full`}>
+            <div className={`relative w-full min-h-screen`}>
                 {/* Hero Background */}
                 <div className="absolute inset-0 z-0">
                     {!isImageLoaded && (

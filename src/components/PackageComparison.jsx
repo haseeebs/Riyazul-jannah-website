@@ -56,7 +56,7 @@ const PackageComparison = () => {
   // Check if packages or hotels are empty
   if (!packages || packages.length === 0) {
     return (
-      <div className="mx-auto max-w-7xl bg-lime-400 px-4 py-4 rounded-3xl">
+      <div className="mx-auto container bg-lime-400 px-4 py-4 rounded-3xl">
         <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
           <h2 className="text-center text-gray-600 text-xl font-semibold">
             No packages available for comparison at the moment. Please check back later.
@@ -68,7 +68,7 @@ const PackageComparison = () => {
 
   if (!hotels || hotels.length === 0) {
     return (
-      <div className="mx-auto max-w-7xl bg-lime-400 px-4 py-4 rounded-3xl">
+      <div className="mx-auto container bg-lime-400 px-4 py-4 rounded-3xl">
         <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
           <h2 className="text-center text-gray-600 text-xl font-semibold">
             No hotel data available. Please contact support for assistance.
@@ -79,7 +79,7 @@ const PackageComparison = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl bg-lime-400 px-4 py-4 rounded-3xl">
+    <div className="mx-auto container bg-lime-400 px-4 py-4 rounded-3xl">
       {/* Filter Section */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

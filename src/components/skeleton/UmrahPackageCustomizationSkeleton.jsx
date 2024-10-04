@@ -1,7 +1,7 @@
 const UmrahPackageCustomizationSkeleton = () => {
   return (
-    <div className="min-h-screen bg-lime-50">
-      <div className="mx-auto max-w-7xl p-6">
+    <div className="min-h-screen bg-lime-50 pt-28">
+      <div className="mx-auto container p-6">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden animate-pulse">
           <div className="bg-lime-500 px-6 py-8">
             <div className="h-8 bg-white/50 rounded w-3/4 mx-auto mb-4"></div>

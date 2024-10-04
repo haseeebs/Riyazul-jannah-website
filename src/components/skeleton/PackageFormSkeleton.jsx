@@ -1,6 +1,6 @@
 const PackageFormSkeleton = () => {
   return (
-    <div className="mx-auto max-w-7xl p-6 bg-lime-50">
+    <div className="mx-auto container p-6 pt-28 bg-lime-50">
       <div className="rounded-3xl border border-lime-200 bg-white shadow-lg">
         <div className="border-b border-lime-100 p-4">
           <div className="h-8 w-64 bg-lime-200" />
