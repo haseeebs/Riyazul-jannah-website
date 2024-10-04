@@ -1,6 +1,6 @@
 import packageServices from '../services/packageService';
 import Card from './Card';
-import PackagesSkeleton from './skeleton/CardSkeleton';
+import PackagesSkeleton from './skeleton/PackagesSkeleton';
 import { useSelector } from 'react-redux';
 
 const Packages = () => {
