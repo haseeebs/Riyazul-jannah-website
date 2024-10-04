@@ -10,8 +10,8 @@ const useFetchData = () => {
     const { packages, hotels, commonInclusions } = useSelector(store => store.package);
 
     useEffect(() => {
-        if (packages.length > 0 && hotels.length > 0 && commonInclusions.length > 0) {
-            console.log("Data already exists, no need to fetch...");
+        if (packages.length > 0 && hotels.length > 0) {
+            console.log("Using persisted data...");
             return;
         } else {
             console.log(`Missing data: Packages (${packages.length}), Hotels (${hotels.length}), Common Inclusions (${commonInclusions.length})`);
