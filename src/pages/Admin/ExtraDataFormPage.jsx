@@ -119,24 +119,30 @@ const ExtraDataFormPage = () => {
   };
 
   const handleAddFoodImage = async (event) => {
-    const file = event.target.files[0];
-    if (!file) {
-      toast.error('Please select an image file.');
+    const files = Array.from(event.target.files);
+    if (files.length === 0) {
+      toast.error('Please select image files.');
       return;
     }
-
+  
     try {
       setIsLoading(true);
-      await packageServices.addFoodImage(file);
-
+      
+      // सभी फाइलों को upload करें
+      const uploadPromises = files.map(file => 
+        packageServices.addFoodImage(file)
+      );
+      
+      await Promise.all(uploadPromises);
+  
       // Fetch updated food images after upload
       const updatedFoodImages = await packageServices.fetchFoodImages();
       dispatch(setFoodImages(updatedFoodImages.files));
-
-      toast.success('Image added successfully.');
+  
+      toast.success(`${files.length} image(s) added successfully.`);
     } catch (error) {
-      console.error('Error uploading image:', error);
-      toast.error('Failed to upload image.');
+      console.error('Error uploading images:', error);
+      toast.error('Failed to upload images.');
     } finally {
       setIsLoading(false);
     }
@@ -321,11 +327,12 @@ const ExtraDataFormPage = () => {
                   htmlFor="foodImageUpload"
                   className="px-4 py-2 rounded-xl bg-lime-500 text-white hover:bg-lime-600 cursor-pointer"
                 >
-                  {isLoading ? 'Uploading...' : 'Upload New Image'}
+                  {isLoading ? 'Uploading...' : 'Upload New Images'}
                   <input
                     id="foodImageUpload"
                     type="file"
                     accept="image/*"
+                    multiple
                     onChange={handleAddFoodImage}
                     className="hidden"
                     disabled={isLoading}

@@ -7,6 +7,7 @@ import { getWhatsappUrl } from '../utils/whatsappUtils';
 import packageServices from '../services/packageService';
 import { removePackage, setFoodImages } from '../store/packageSlice';
 import toast from 'react-hot-toast';
+import FoodGallery from '../components/FoodGallery';
 
 const PackageDetail = () => {
   const { id } = useParams();
@@ -158,18 +159,19 @@ const PackageDetail = () => {
   return (
     <div className="min-h-screen">
       <header
-        className={`w-full bg-white shadow-md transition-all duration-300 py-4'}`}
+        className="sticky top-0 z-10 w-full bg-white shadow-md transition-all duration-300"
       >
-        <div className="container mx-auto px-4 py-6 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 pt-20 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center text-lime-600 hover:text-lime-700 font-medium"
+            className="flex items-center text-lime-600 hover:text-lime-700 font-medium 
+  bg-lime-50 rounded-full px-4 py-2 hover:bg-lime-100 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back
           </button>
           <h1
-            className={`font-bold text-gray-800 transition-all duration-300 text-6xl'}`}
+            className={`font-bold text-gray-800 transition-all duration-300 text-xl md:text-4xl'}`}
           >
             {currentPackage.type} Umrah Package
           </h1>
@@ -177,7 +179,7 @@ const PackageDetail = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 space-y-8 pb-24">
+      <main className="container mx-auto px-4 py-8 space-y-8 pb-24 mt-4">
         {/* Package Summary */}
         <div className="bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl p-6 text-white shadow-lg">
           <div className={`grid ${currentPackage.travelDate ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>
@@ -220,42 +222,7 @@ const PackageDetail = () => {
         </div>
 
         {/* Food Photos */}
-        <div className="bg-white rounded-3xl shadow-lg p-6">
-          <h3 className="text-2xl font-bold mb-4 text-gray-800">Food Gallery</h3>
-
-          {foodImagesError ? (
-            <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
-              {foodImagesError}
-              <button
-                onClick={() => {
-                  setFoodImagesError(null);
-                  // Retry fetch logic
-                  toast.error('Add food images...')
-                }}
-                className="ml-4 text-red-800 underline"
-              >
-                Retry
-              </button>
-            </div>
-          ) : (
-            <>
-              <p className="text-gray-600 mb-4">
-                Get a glimpse of the delicious meals and dining experiences included in your package:
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {foodImages.length > 0 && foodImages.map((image, index) => (
-                  <div key={index} className="relative h-48 rounded-lg overflow-hidden">
-                    <img
-                      src={packageServices.getFoodFilePreview(image.$id)}
-                      alt={image.alt || `Food photo ${index + 1}`}
-                      className="object-cover fill transition-transform duration-300 hover:scale-110"
-                    />
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+        <FoodGallery foodImages={foodImages} />
 
         {/* Duration Tabs */}
         <div className="bg-white rounded-3xl shadow-lg p-6">

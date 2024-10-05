@@ -52,7 +52,7 @@ const UniquePackages = () => {
                 <h2 className="text-lime-600 text-3xl font-bold text-center mb-12">
                     Our Popular Packages for Every Budget
                 </h2>
-                <div className="grid grid-col-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {uniquePackages.map((pkg) => (
                         <Card
                             key={pkg.$id}

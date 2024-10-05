@@ -9,7 +9,7 @@ const Card = ({ packageId, image, title, price, makkahLocation, madinahLocation,
     };
 
     return (
-        <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
             {/* Featured Badge */}
             <div className="absolute top-4 right-4 bg-lime-600/90 backdrop-blur-sm text-white px-4 py-1.5 rounded-full z-10 text-sm font-medium">
                 {badge}
@@ -28,7 +28,7 @@ const Card = ({ packageId, image, title, price, makkahLocation, madinahLocation,
             {/* Content */}
             <div className="p-7">
                 {/* Title */}
-                <h2 className="text-2xl font-bold mb-4 text-lime-950 line-clamp-2 cursor-default tracking-tight hover:text-lime-700 transition-colors">
+                <h2 className="sm:text-xl lg:text-2xl font-bold mb-4 text-lime-950 line-clamp-2 cursor-default tracking-tight hover:text-lime-700 transition-colors">
                     {title}
                 </h2>
 
