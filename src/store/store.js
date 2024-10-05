@@ -4,17 +4,53 @@ import packageReducer from './packageSlice';
 import notificationReducer from './notificationSlice';
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist';
+// import { createTransform } from 'redux-persist';
+
+// // Create expiry transform
+// const createExpiryTransform = (expiryHours = 24) => {
+//   return createTransform(
+//     // transform state on its way to being serialized and persisted
+//     (inboundState) => {
+//       return {
+//         ...inboundState,
+//         timestamp: new Date().getTime()
+//       }
+//     },
+//     // transform state being rehydrated
+//     (outboundState) => {
+//       const now = new Date().getTime();
+//       const storedTime = outboundState.timestamp;
+//       const expiryTime = expiryHours * 60 * 60 * 1000; // convert hours to milliseconds
+
+//       if (storedTime && now - storedTime > expiryTime) {
+//         // Data has expired, return empty state
+//         return {
+//           packages: [],
+//           hotels: [],
+//           commonInclusions: [],
+//           allImages: [],
+//           foodImages: [],
+//           loading: false,
+//           error: null
+//         }
+//       }
+//       return outboundState;
+//     }
+//   );
+// }
 
 const packagePersistConfig = {
     key: 'package',
     storage,
-    whiteList: ['packages', 'hotels', 'commonInclusions', 'allImages', 'foodImages']
+    whiteList: ['packages', 'hotels', 'commonInclusions', 'allImages', 'foodImages'],
+    // transforms: [createExpiryTransform(24)] // 24 hours expiry
 };
 
 const notificationPersistConfig = {
     key: 'notification',
     storage,
-    whiteList: ['notifications']
+    whiteList: ['notifications'],
+    // transforms: [createExpiryTransform(12)] // 12 hours expiry
 };
 
 const store = configureStore({

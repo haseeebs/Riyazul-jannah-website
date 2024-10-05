@@ -98,23 +98,42 @@ const HotelForm = () => {
         }
     };
 
-    // Handle image upload with improved file tracking
-    const handleImageUpload = async (e, index) => {
+    // Handle multiple images upload with improved file tracking
+    const handleMultipleImageUpload = async (e) => {
         try {
-            const file = e.target.files[0];
-            if (file) {
-                const response = await hotelServices.fileUpload(file);
-                if (response) {
-                    // Update form images
-                    setHotelData(prev => {
-                        const newImages = [...prev.images];
-                        newImages[index] = response.$id;
-                        return { ...prev, images: newImages };
-                    });
+            const files = Array.from(e.target.files);
+
+            if (files.length > 0) {
+                // Upload multiple files with Promise.all for concurrent uploads
+                const uploadPromises = files.map(async (file) => {
+                    try {
+                        const response = await hotelServices.fileUpload(file);
+                        return response.$id;
+                    } catch (error) {
+                        console.error(`Error uploading image ${file.name}:`, error);
+                        toast.error(`Failed to upload ${file.name}`);
+                        return null;
+                    }
+                });
+
+                const uploadedImages = await Promise.all(uploadPromises);
+
+                // Filter out any null values (failed uploads)
+                const validImages = uploadedImages.filter(imageId => imageId !== null);
+
+                // Add new images to existing images
+                setHotelData(prev => ({
+                    ...prev,
+                    images: [...prev.images, ...validImages]
+                }));
+
+                if (validImages.length > 0) {
+                    toast.success(`${validImages.length} image(s) uploaded successfully`);
                 }
             }
         } catch (error) {
-            console.error("Error uploading image:", error);
+            console.error("Error uploading multiple images:", error);
+            toast.error("Failed to upload images");
         }
     };
 
@@ -313,57 +332,42 @@ const HotelForm = () => {
                         {activeTab === 2 && (
                             <div className="space-y-4">
                                 <h3 className="text-lg text-lime-800">Hotel Images</h3>
-                                {hotelData.images.map((imageId, index) => (
-                                    <div key={index} className="flex gap-2">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => handleImageUpload(e, index)}
-                                            className={`rounded-xl p-4 border ${errors.walkingTime ? "border-red-500" : "border-lime-200"
-                                                } focus:ring-lime-500 w-full flex-1`}
-                                        />
-                                        {errors.images && (
-                                            <p className="text-red-500 text-sm mt-1">{errors.images}</p>
-                                        )}
-                                        {imageId && (
-                                            <div className="w-20 h-20">
+
+                                {/* Multiple image upload input */}
+                                <div className="mb-4">
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleMultipleImageUpload}
+                                        className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full"
+                                    />
+                                    {errors.images && (
+                                        <p className="text-red-500 text-sm mt-1">{errors.images}</p>
+                                    )}
+                                </div>
+
+                                {/* Display uploaded images */}
+                                {hotelData.images.length > 0 && (
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {hotelData.images.map((imageId, index) => (
+                                            <div key={index} className="relative">
                                                 <img
                                                     src={packageServices.getOptimizedFilePreview(imageId)}
                                                     alt={`Hotel image ${index + 1}`}
-                                                    className="w-full h-full object-cover rounded-lg"
+                                                    className="w-full h-40 object-cover rounded-lg"
                                                 />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDeleteImage(index)}
+                                                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 text-xs"
+                                                >
+                                                    Remove
+                                                </button>
                                             </div>
-                                        )}
-                                        <button
-                                            type="button"
-                                            onClick={() => handleDeleteImage(index)}
-                                            className="text-red-500 hover:bg-lime-100 px-4 rounded-xl"
-                                        >
-                                            Remove
-                                        </button>
+                                        ))}
                                     </div>
-                                ))}
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        // Only add a new image input if the last input is not empty
-                                        const prevImages = hotelData.images;
-                                        const lastImage = prevImages[prevImages.length - 1];
-
-                                        if (lastImage === undefined || lastImage.trim() !== '') {
-                                            setHotelData(prev => ({
-                                                ...prev,
-                                                images: [...prev.images, ""]
-                                            }));
-                                        } else {
-                                            // Optional: Show a toast or give user feedback
-                                            toast.error('Please select an image before adding another');
-                                        }
-                                    }}
-                                    className="w-full rounded-xl border border-lime-400 text-lime-700 hover:bg-lime-50 py-2"
-                                >
-                                    Add Image
-                                </button>
+                                )}
                             </div>
                         )}
                     </div>

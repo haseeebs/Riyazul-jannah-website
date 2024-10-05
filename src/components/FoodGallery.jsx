@@ -1,17 +1,33 @@
-import { useState } from 'react';
-import { ImagePlus } from 'lucide-react';
+import React, { useState } from 'react';
+import { ImagePlus, ChevronLeft, ChevronRight } from 'lucide-react';
 import packageServices from '../services/packageService';
 
 const FoodGallery = ({ foodImages = [] }) => {
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+    const MAX_INITIAL_IMAGES = 3; // Number of images to show initially
 
-    const handleImageClick = (image) => {
-        setSelectedImage(image);
+    const handleImageClick = (index) => {
+        setSelectedImageIndex(index);
     };
 
     const closeModal = () => {
-        setSelectedImage(null);
+        setSelectedImageIndex(null);
     };
+
+    const nextImage = () => {
+        setSelectedImageIndex((prevIndex) =>
+            prevIndex === foodImages.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
+    const prevImage = () => {
+        setSelectedImageIndex((prevIndex) =>
+            prevIndex === 0 ? foodImages.length - 1 : prevIndex - 1
+        );
+    };
+
+    const initialImages = foodImages.slice(0, MAX_INITIAL_IMAGES);
+    const remainingImagesCount = foodImages.length - MAX_INITIAL_IMAGES;
 
     return (
         <div className="bg-white rounded-3xl shadow-lg p-6 space-y-4">
@@ -36,8 +52,9 @@ const FoodGallery = ({ foodImages = [] }) => {
                     <p className="text-gray-600">
                         Get a glimpse of the delicious meals and dining experiences included in your package:
                     </p>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {foodImages.map((image, index) => (
+
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {initialImages.map((image, index) => (
                             <div
                                 key={image.$id}
                                 className="relative group"
@@ -46,29 +63,61 @@ const FoodGallery = ({ foodImages = [] }) => {
                                     <img
                                         src={packageServices.getFoodFilePreview(image.$id)}
                                         alt={image.alt || `Food photo ${index + 1}`}
-                                        onClick={() => handleImageClick(image)}
+                                        onClick={() => handleImageClick(index)}
                                         className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110 cursor-pointer"
                                     />
                                 </div>
                             </div>
                         ))}
-                    </div>
 
-                    {/* Image Modal */}
-                    {selectedImage && (
+                    </div>
+                    {remainingImagesCount > 0 && (
                         <div
-                            className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4"
+                            className="px-2 py-4 flex items-center justify-center bg-lime-200 text-lime-800 font-bold text-lg rounded-lg hover:bg-lime-300 transition-colors duration-300 cursor-pointer"
+                            onClick={() => handleImageClick(MAX_INITIAL_IMAGES)}
+                        >
+                            +{remainingImagesCount} more
+                        </div>
+                    )}
+
+                    {selectedImageIndex !== null && (
+                        <div
+                            className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
                             onClick={closeModal}
                         >
                             <div
-                                className="max-w-4xl max-h-[90vh] overflow-hidden rounded-lg shadow-2xl"
+                                className="relative max-w-4xl max-h-[90vh] w-full"
                                 onClick={(e) => e.stopPropagation()}
                             >
+                                <button
+                                    onClick={closeModal}
+                                    className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 z-10"
+                                >
+                                    ✕
+                                </button>
+
+                                <button
+                                    onClick={prevImage}
+                                    className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-black/50 rounded-full p-2 z-10"
+                                >
+                                    <ChevronLeft />
+                                </button>
+
+                                <button
+                                    onClick={nextImage}
+                                    className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-black/50 rounded-full p-2 z-10"
+                                >
+                                    <ChevronRight />
+                                </button>
+
                                 <img
-                                    src={packageServices.getFoodFilePreview(selectedImage.$id)}
-                                    alt={selectedImage.alt || 'Food image'}
-                                    className="w-full h-full object-contain"
+                                    src={packageServices.getFoodFilePreview(foodImages[selectedImageIndex].$id)}
+                                    alt={foodImages[selectedImageIndex].alt || 'Food image'}
+                                    className="w-full max-h-[90vh] object-contain"
                                 />
+                                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
+                                    {selectedImageIndex + 1} of {foodImages.length}
+                                </div>
                             </div>
                         </div>
                     )}
