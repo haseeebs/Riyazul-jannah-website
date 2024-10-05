@@ -2,8 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import packageReducer from './packageSlice';
 import notificationReducer from './notificationSlice';
-import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist';
+import sessionStorage from 'redux-persist/lib/storage/session';
 // import { createTransform } from 'redux-persist';
 
 // // Create expiry transform
@@ -41,15 +41,15 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 const packagePersistConfig = {
     key: 'package',
-    storage,
-    whiteList: ['packages', 'hotels', 'commonInclusions', 'allImages', 'foodImages'],
+    storage: sessionStorage,
+    whitelist: ['packages', 'hotels', 'commonInclusions', 'allImages', 'foodImages'], // Iske andar jo packages hain sirf unko
     // transforms: [createExpiryTransform(24)] // 24 hours expiry
 };
 
 const notificationPersistConfig = {
     key: 'notification',
-    storage,
-    whiteList: ['notifications'],
+    storage: sessionStorage,
+    whitelist: ['notifications'], // and in notifications ko
     // transforms: [createExpiryTransform(12)] // 12 hours expiry
 };
 
