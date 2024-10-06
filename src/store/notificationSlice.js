@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     notifications: [],
+    isNotificationsFetched: false,
     loading: false,
     error: null
 }
@@ -35,6 +36,9 @@ const notificationSlice = createSlice({
                     : notif
             );
         },
+        markNotificationsAsFetched: (state, action) => {
+            state.isNotificationsFetched = action.payload;
+        },
         setLoading: (state, action) => {
             state.loading = action.payload;
         },
@@ -44,6 +48,6 @@ const notificationSlice = createSlice({
     }
 });
 
-export const { setNotifications, addNotification, removeNotification, deactivateNotification, activateNotification, setLoading, setError } = notificationSlice.actions;
+export const { setNotifications, addNotification, removeNotification, deactivateNotification, activateNotification, markNotificationsAsFetched, setLoading, setError } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

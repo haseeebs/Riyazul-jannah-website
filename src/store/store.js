@@ -49,7 +49,7 @@ const packagePersistConfig = {
 const notificationPersistConfig = {
     key: 'notification',
     storage: sessionStorage,
-    whitelist: ['notifications'], // and in notifications ko
+    whitelist: ['notifications', 'isNotificationsFetched'], // and in notifications ko
     // transforms: [createExpiryTransform(12)] // 12 hours expiry
 };
 

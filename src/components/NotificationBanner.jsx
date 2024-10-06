@@ -1,28 +1,29 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import notificationService from "../services/notificationService";
-import { setNotifications } from "../store/notificationSlice";
+import { markNotificationsAsFetched, setNotifications } from "../store/notificationSlice";
 
 const NotificationBanner = () => {
     const dispatch = useDispatch();
-    const { notifications } = useSelector((store) => store.notification);
+    const { notifications, isNotificationsFetched } = useSelector((store) => store.notification);
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         const fetchNotifications = async () => {
-            if (notifications.length === 0) {
+            if (!isNotificationsFetched) {
                 try {
                     const response = await notificationService.fetchActiveNotifications();
                     dispatch(setNotifications(response));
+                    dispatch(markNotificationsAsFetched(true));
                 } catch (error) {
                     console.error("Error fetching notifications:", error);
                 }
             }
         };
-
+        console.log("No notifications...")
         fetchNotifications();
-    }, [dispatch, notifications.length]);
+    }, [isNotificationsFetched, dispatch]);
 
     useEffect(() => {
         if (notifications.length > 1) {
