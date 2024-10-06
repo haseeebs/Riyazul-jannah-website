@@ -6,6 +6,11 @@ const initialState = {
     commonInclusions: [],
     allImages: [],
     foodImages: [],
+    instagramMedia: {
+        items: [],
+        nextCursor: null,
+        error: null
+    },
     loading: false,
     error: null
 }
@@ -50,6 +55,16 @@ const packageSlice = createSlice({
                 image => image.$id !== action.payload
             )
         },
+        setInstagramMedia: (state, action) => {
+            const { items, nextCursor } = action.payload;
+            state.instagramMedia.items = items;
+            state.instagramMedia.nextCursor = nextCursor;
+        },
+        appendInstagramMedia: (state, action) => {
+            const { items, nextCursor } = action.payload;
+            state.instagramMedia.items = [...state.instagramMedia.items, ...items];
+            state.instagramMedia.nextCursor = nextCursor;
+        },
         setLoading: (state, action) => {
             state.loading = action.payload;
         },
@@ -59,5 +74,5 @@ const packageSlice = createSlice({
     }
 });
 
-export const { setPackages, removePackage, setHotels,removeHotel, setCommonInclusions, removeCommonInclusion,setAllImages, removeImages, setFoodImages, removeFoodImage, setLoading, setError } = packageSlice.actions;
+export const { setPackages, removePackage, setHotels, removeHotel, setCommonInclusions, removeCommonInclusion, setAllImages, removeImages, setFoodImages, removeFoodImage, setInstagramMedia, appendInstagramMedia, setLoading, setError } = packageSlice.actions;
 export default packageSlice.reducer;

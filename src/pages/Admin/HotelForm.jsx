@@ -65,18 +65,10 @@ const HotelForm = () => {
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
 
-        if (name === "hasShuttle") {
-            setHotelData((prev) => ({
-                ...prev,
-                hasShuttle: checked,
-                transport: checked ? "Free Shuttle Service (5 min journey)" : "",
-            }));
-        } else {
-            setHotelData((prev) => ({
-                ...prev,
-                [name]: type === "checkbox" ? checked : value,
-            }));
-        }
+        setHotelData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
     };
 
     const handleDeleteImage = async (index) => {
@@ -317,9 +309,8 @@ const HotelForm = () => {
                                             value={hotelData.transport}
                                             onChange={handleInputChange}
                                             placeholder="e.g. Free Shuttle Bus (5 min journey)"
-                                            disabled={hotelData.hasShuttle}
                                             className={`rounded-xl p-4 border ${errors.transport ? "border-red-500" : "border-lime-200"
-                                                } focus:ring-lime-500 w-full ${hotelData.hasShuttle ? "cursor-not-allowed" : "cursor-auto"}`}
+                                                } focus:ring-lime-500 w-full`}
                                         />
                                         {errors.transport && (
                                             <p className="text-red-500 text-sm mt-1">{errors.transport}</p>

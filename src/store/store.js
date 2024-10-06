@@ -42,7 +42,7 @@ import sessionStorage from 'redux-persist/lib/storage/session';
 const packagePersistConfig = {
     key: 'package',
     storage: sessionStorage,
-    whitelist: ['packages', 'hotels', 'commonInclusions', 'allImages', 'foodImages'], // Iske andar jo packages hain sirf unko
+    whitelist: ['packages', 'hotels', 'commonInclusions', 'allImages', 'foodImages', 'instagramMedia'], // Iske andar jo packages hain sirf unko
     // transforms: [createExpiryTransform(24)] // 24 hours expiry
 };
 

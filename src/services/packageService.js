@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Storage } from "appwrite";
+import { Client, Databases, ID, Query, Storage } from "appwrite";
 import config from "../config/config";
 import toast from "react-hot-toast";
 
@@ -276,6 +276,32 @@ class PackageServices {
         }
     }
 
+    async fetchInstagramMedia(limit = 20, nextCursor = null) {
+        try {
+            const queries = [Query.limit(limit)];
+            
+            // If nextCursor exists, add cursor query for pagination
+            if (nextCursor) {
+                queries.push(Query.cursorAfter(nextCursor));
+            }
+
+            const response = await this.databases.listDocuments(
+                config.databaseId,
+                config.instagramMediaCollectionId,
+                queries
+            );
+            
+            return {
+                items: response.documents,
+                nextCursor: response.documents.length
+                    ? response.documents[response.documents.length - 1].$id
+                    : null, // Set nextCursor based on last document ID
+            };
+        } catch (error) {
+            console.error('Error fetching media data from Appwrite:', error);
+            throw new Error('Failed to fetch media data');
+        }
+    }
 }
 
 const packageServices = new PackageServices();
