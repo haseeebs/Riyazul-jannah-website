@@ -13,7 +13,7 @@ import MediaCarousel from '../components/MediaCarousel';
 const ReelCarousel = () => {
   const dispatch = useDispatch();
   const { instagramMedia, loading } = useSelector((store) => store.package);
-  const { items: instagramMediaItems, nextCursor, error } = instagramMedia;
+  const { items: instagramMediaItems = [], nextCursor, error } = instagramMedia;
 
   const [zoomModal, setZoomModal] = useState({
     isOpen: false,
@@ -32,12 +32,12 @@ const ReelCarousel = () => {
     usePrevNextButtons(imageEmblaApi);
 
   const videos = useMemo(() =>
-    instagramMediaItems.filter(item => item.media_type === 'VIDEO'),
+    Array.isArray(instagramMediaItems) ? instagramMediaItems.filter(item => item.media_type === 'VIDEO') : [],
     [instagramMediaItems]
   );
 
   const carouselAlbum = useMemo(() =>
-    instagramMediaItems.filter(item => item.media_type === 'CAROUSEL_ALBUM'),
+    Array.isArray(instagramMediaItems) ? instagramMediaItems.filter(item => item.media_type === 'CAROUSEL_ALBUM') : [],
     [instagramMediaItems]
   );
 
