@@ -10,6 +10,7 @@ const config = {
     bucketId: String(import.meta.env.VITE_APPWRITE_BUCKET_ID),
     customizePackageRequestCollectionId: String(import.meta.env.VITE_APPWRITE_CUSTOMIZE_PACKAGE_REQUEST_COLLECTION_ID),
     notificationsCollectionId: String(import.meta.env.VITE_APPWRITE_NOTIFICATIONS_COLLECTION_ID),
+    instagramAccessToken: String(import.meta.env.VITE_INSTAGRAM_ACCESS_TOKEN),
     instagramMediaCollectionId: String(import.meta.env.VITE_APPWRITE_INSTAGRAM_MEDIA_COLLECTION_ID),
 };
 

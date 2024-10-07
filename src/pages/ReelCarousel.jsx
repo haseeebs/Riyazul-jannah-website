@@ -5,7 +5,7 @@ import { Play, Image as ImageIcon, CircleCheck } from 'lucide-react';
 import '../css/embla.css';
 import MediaZoomModal from '../components/MediaZoomModal';
 import packageServices from '../services/packageService';
-import { appendInstagramMedia, setInstagramMedia } from '../store/packageSlice';
+import { appendInstagramMedia, setInstagramMedia, setLoading } from '../store/packageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MediaErrorFallback from '../components/MediaErrorFallback';
 import MediaCarousel from '../components/MediaCarousel';
@@ -43,6 +43,8 @@ const ReelCarousel = () => {
 
   const fetchMedia = useCallback(async (cursor = null) => {
     try {
+      dispatch(setLoading(true));
+      
       const { items, nextCursor } = await packageServices.fetchInstagramMedia(20, cursor);
 
       if (cursor) {
@@ -53,6 +55,8 @@ const ReelCarousel = () => {
     } catch (error) {
       console.error('Fetch Error:', error);
       dispatch(setInstagramMedia({ error: error.response?.data?.error?.message || 'Failed to fetch media' }));
+    } finally {
+      dispatch(setLoading(false))
     }
   }, [dispatch]);
 
@@ -63,8 +67,8 @@ const ReelCarousel = () => {
   }, [fetchMedia, instagramMediaItems.length, loading, error]);
 
   const handleLoadMore = () => {
-    if (nextCursor) {
-      fetchMedia(nextCursor);
+    if (nextCursor?.next) {
+      fetchMedia(nextCursor?.cursors?.after);
     }
   };
 
@@ -98,7 +102,7 @@ const ReelCarousel = () => {
           <span className="font-bold text-lime-800">{videos.length} Videos</span>
         </div>
 
-        {nextCursor ? (
+        {nextCursor?.next ? (
           <button
             onClick={handleLoadMore}
             className="bg-lime-500 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-300 hover:bg-lime-600"
@@ -107,7 +111,7 @@ const ReelCarousel = () => {
             {loading ? 'Loading...' : 'Load More'}
           </button>
         ) : (
-          <div className="flex items-center justify-center text-lime-600 bg-lime-100 py-2 px-4 rounded-full shadow-md space-x-2 cursor-not-allowed">
+          <div className="flex items-center justify-center text-lime-600 bg-lime-100 py-2 px-4 rounded-lg shadow-md space-x-2 cursor-not-allowed">
             <span className="font-semibold">All media loaded</span>
             <CircleCheck />
           </div>
