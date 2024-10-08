@@ -56,9 +56,10 @@ const packageSlice = createSlice({
             )
         },
         setInstagramMedia: (state, action) => {
-            const { items, nextCursor } = action.payload;
+            const { items, nextCursor, error } = action.payload;
             state.instagramMedia.items = items;
             state.instagramMedia.nextCursor = nextCursor;
+            state.instagramMedia.error = error;
         },
         appendInstagramMedia: (state, action) => {
             const { items, nextCursor } = action.payload;

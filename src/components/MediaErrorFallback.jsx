@@ -1,4 +1,4 @@
-const MediaErrorFallback = ({ error: message, retry }) => (
+const MediaErrorFallback = ({ error: message }) => (
     <div className="py-20 px-4">
         <div className="max-w-3xl mx-auto text-center space-y-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-lime-600">Our Instagram Moments</h2>
@@ -24,14 +24,6 @@ const MediaErrorFallback = ({ error: message, retry }) => (
         </div>
         <div className="text-center py-10">
             <p className="text-red-600">{message}</p>
-            {retry && (
-                <button
-                    onClick={retry}
-                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                    Retry
-                </button>
-            )}
         </div>
     </div>
 );

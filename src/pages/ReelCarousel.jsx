@@ -54,17 +54,15 @@ const ReelCarousel = () => {
       }
     } catch (error) {
       console.error('Fetch Error:', error);
-      dispatch(setInstagramMedia({ error: error.response?.data?.error?.message || 'Failed to fetch media' }));
+      dispatch(setInstagramMedia({ error: error?.message || 'Failed to fetch media' }));
     } finally {
       dispatch(setLoading(false))
     }
   }, [dispatch]);
 
   useEffect(() => {
-    if (instagramMediaItems.length === 0 && !loading && !error) {
-      fetchMedia();
-    }
-  }, [fetchMedia, instagramMediaItems.length, loading, error]);
+    fetchMedia();
+  }, []);
 
   const handleLoadMore = () => {
     if (nextCursor?.next) {
@@ -81,7 +79,7 @@ const ReelCarousel = () => {
   };
 
   if (error) {
-    return <MediaErrorFallback error={error} retry={() => fetchMedia()} />;
+    return <MediaErrorFallback error={error} />;
   }
 
   return (
