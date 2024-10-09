@@ -30,9 +30,9 @@ const HotelCard = ({ hotel }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-xl border border-lime-300 shadow-md overflow-hidden">
             <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">{hotel.name}</h3>
+                <h3 className="text-2xl font-bold mb-2 text-lime-700">{hotel.name}</h3>
                 <div className="flex items-center text-gray-600 mb-4">
                     <MapPin className="w-4 h-4 mr-1" />
                     <span>{hotel.city}, {hotel.distance} from Haram</span>
@@ -47,26 +47,26 @@ const HotelCard = ({ hotel }) => {
                         alt={hotel.name}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
-                    <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                    <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded-xl text-sm">
                         {hotel.images.length} photos
                     </div>
                 </div>
 
                 <div className="space-y-3">
                     <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-400 mr-2" />
-                        <span>{hotel.category}</span>
+                        <Star className="w-5 h-5 text-yellow-400 mr-2"/>
+                        <span className="font-medium text-gray-700">{hotel.category}</span>
                     </div>
                     {hotel.hasShuttle ? (
                         <div className="flex items-center">
-                            <Bus className="w-4 h-4 mr-2" />
-                            <span>{hotel.transport}</span>
+                            <Bus className="w-5 h-5 mr-2"/>
+                            <span className="text-gray-700">{hotel.transport}</span>
                         </div>
                     ) : (
 
                         <div className="flex items-center">
-                            <Clock className="w-4 h-4 mr-2" />
-                            <span>{hotel.walkingTime} walk to Haram</span>
+                            <Clock className="w-5 h-5 mr-2"/>
+                            <span className="text-gray-700">{hotel.walkingTime} walk to Haram</span>
                         </div>
                     )}
                 </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CTA from '../components/CTA';
 import PackageComparison from '../components/PackageComparison';
 import WhyChooseUs from '../components/WhyChooseUs';
@@ -6,6 +6,14 @@ import packageServices from '../services/packageService';
 
 const Packages = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth' 
+    });
+  }, []);
 
   return (
     <div className="min-h-screen mx-auto container py-0 lg:py-10 lg:pt-28 bg-lime-50">

@@ -456,8 +456,8 @@ const PackageForm = () => {
                   <label className="block text-lime-700">Travel Date (optional)</label>
                   <input
                     name="travelDate"
-                    type="month"
-                    value={formData.travelDate}
+                    type="date"
+                    value={formData.travelDate || ''}
                     onChange={handleInputChange}
                     className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full cursor-pointer"
                   />

@@ -1,11 +1,11 @@
-import { ArrowLeft, Calendar, Check, Phone, Users, X } from 'lucide-react';
+import { ArrowLeft, Calendar, CalendarCheck, Check, Phone, Users, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import HotelCard from '../components/HotelCard';
 import { getWhatsappUrl } from '../utils/whatsappUtils';
 import packageServices from '../services/packageService';
-import { removePackage, setFoodImages } from '../store/packageSlice';
+import { removePackage, setFoodImages, setFoodImagesFetched } from '../store/packageSlice';
 import toast from 'react-hot-toast';
 import FoodGallery from '../components/FoodGallery';
 
@@ -16,7 +16,7 @@ const PackageDetail = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { status } = useSelector(store => store.auth);
-  const { packages, hotels, commonInclusions, foodImages } = useSelector((store) => store.package);
+  const { packages, hotels, commonInclusions, foodImages, foodImagesFetched } = useSelector((store) => store.package);
 
   const [selectedDays, setSelectedDays] = useState(null);
   const [pageError, setPageError] = useState(null);
@@ -49,7 +49,6 @@ const PackageDetail = () => {
   }, [currentPackage, makkahHotel, madinahHotel, id, navigate]);
 
   useEffect(() => {
-    // Food images fetch with improved error handling
     const fetchFoodImages = async () => {
       try {
         if (foodImages.length > 0) {
@@ -58,10 +57,11 @@ const PackageDetail = () => {
         }
 
         const response = await packageServices.fetchFoodImages();
+        dispatch(setFoodImagesFetched(true));
+
         if (!response || !response.files || response.files.length === 0) {
           throw new Error('No food images available');
         }
-
         dispatch(setFoodImages(response.files));
       } catch (error) {
         console.error(`Food images fetch error: ${error}`);
@@ -69,7 +69,9 @@ const PackageDetail = () => {
       }
     };
 
-    fetchFoodImages();
+    if (!foodImagesFetched) {
+      fetchFoodImages();
+    }
   }, []);
 
   // Set a sensible default for selectedDays
@@ -97,9 +99,25 @@ const PackageDetail = () => {
     ?.map((duration) => duration.days)
     .sort((a, b) => a - b);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    useEffect(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth' 
+      });
+    }, []);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return ''; // Return empty string if no date
+
+    const options = {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  };
 
   // Error State Rendering
   if (pageError) {
@@ -157,47 +175,33 @@ const PackageDetail = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-16">
       <header
         className="sticky top-0 z-10 w-full bg-white shadow-md transition-all duration-300"
       >
-        <div className="container mx-auto px-4 py-4 pt-20 flex items-center justify-between">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center text-lime-600 hover:text-lime-700 font-medium 
-  bg-lime-50 rounded-full px-4 py-2 hover:bg-lime-100 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </button>
-          <h1
-            className={`font-bold text-gray-800 transition-all duration-300 text-xl md:text-4xl'}`}
-          >
-            {currentPackage.type} Umrah Package
-          </h1>
-        </div>
+
       </header>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 space-y-8 pb-24 mt-4">
         {/* Package Summary */}
-        <div className="bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl p-6 text-white shadow-lg">
-          <div className={`grid ${currentPackage.travelDate ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>
+        <div className="border border-lime-400 text-lime-600 rounded-3xl p-6 shadow-lg">
+          <div className={`grid ${currentPackage.travelDate ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6 items-center`}>
             <div className="space-y-2">
-              <div className="text-lime-100">Starting From</div>
-              <div className="text-4xl font-bold">
+              <div className="text-gray-500">Starting From</div>
+              <div className="text-3xl font-semibold">
                 ₹{basePrice?.toLocaleString('en-IN') || 'N/A'}
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-lime-100">Duration</div>
+              <div className="text-gray-500">Duration</div>
               <div className="text-2xl font-semibold flex items-center gap-2">
                 <Calendar className="w-6 h-6" />
                 {selectedDays || 'Select'} Days
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-lime-100">Base Occupancy</div>
+              <div className="text-gray-500">Base Occupancy</div>
               <div className="text-2xl font-semibold flex items-center gap-2">
                 <Users className="w-6 h-6" />
                 Quad Sharing
@@ -205,10 +209,10 @@ const PackageDetail = () => {
             </div>
             {currentPackage.travelDate && (
               <div className="space-y-2">
-                <div className="text-lime-100">Date</div>
+                <div className="text-gray-500">Travel Date</div>
                 <div className="text-2xl font-semibold flex items-center gap-2">
-                  <Users className="w-6 h-6" />
-                  {currentPackage.travelDate}
+                  <CalendarCheck className="w-6 h-6" />
+                  <p>{formatDate(currentPackage.travelDate)}</p>
                 </div>
               </div>
             )}
@@ -347,15 +351,18 @@ const PackageDetail = () => {
       </main>
 
       {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div>
-            <p className="text-3xl font-bold text-lime-600">
-              ₹{basePrice?.toLocaleString('en-IN') || 'N/A'}
-            </p>
-            <p className="text-gray-600">Starting Price</p>
-          </div>
-          <button className="w-full sm:w-auto bg-lime-500 hover:bg-lime-600 text-white px-8 py-4 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl">
+      <div className="fixed bottom-0 left-0 right-0 bg-transparent p-4">
+        <div className="container mx-auto flex sm:flex-row justify-between items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center border border-lime-600 text-lime-600 hover:text-lime-700 font-medium 
+  bg-lime-50 rounded-xl px-4 py-2 hover:bg-lime-100 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back
+          </button>
+          <button className="w-full sm:w-auto flex items-center border border-lime-500 text-lime-100 hover:text-lime-700 font-medium 
+  bg-lime-500 rounded-xl sm:px-6 sm:py-4 px-3 py-3 hover:bg-lime-100 transition-colors duration-300">
             <Phone className="w-5 h-5 mr-2" />
             <a href={getWhatsappUrl()} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
           </button>
