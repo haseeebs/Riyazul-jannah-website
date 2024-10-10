@@ -10,9 +10,10 @@ const Card = ({ packageId, image, title, price, makkahLocation, madinahLocation,
     // Function to determine badge color based on package type
     const getBadgeClass = () => {
         switch (badge) {
-            case "Economy":
             case "Budget":
                 return "bg-blue-500";
+            case "Economy":
+                return "bg-emerald-500";
             case "Deluxe":
                 return "bg-lime-600";
             case "5-Star":

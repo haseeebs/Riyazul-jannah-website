@@ -299,6 +299,7 @@ const CustomizePackage = () => {
                   value={formState.hotelCategory}
                   onChange={(value) => updateState('hotelCategory', value)}
                   options={[
+                    { value: "budget", label: "Budget" },
                     { value: "economy", label: "Economy" },
                     { value: "deluxe", label: "Deluxe" },
                     { value: "5-star", label: "5-Star" },
