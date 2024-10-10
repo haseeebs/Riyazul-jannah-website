@@ -1,17 +1,37 @@
 import { useNavigate } from "react-router-dom";
 
 const Card = ({ packageId, image, title, price, makkahLocation, madinahLocation, badge }) => {
-
     const navigate = useNavigate();
 
     const handleBookNow = () => {
         navigate(`/packages/${packageId}`);
     };
 
+    // Function to determine badge color based on package type
+    const getBadgeClass = () => {
+        switch (badge) {
+            case "Economy":
+            case "Budget":
+                return "bg-blue-500";
+            case "Deluxe":
+                return "bg-lime-600";
+            case "5-Star":
+                return "bg-yellow-500";
+            case "Ramzan":
+                return "bg-indigo-600";
+            case "Hajj":
+                return "bg-black";
+            default:
+                return "bg-gray-500";
+        }
+    };
+
     return (
         <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
             {/* Featured Badge */}
-            <div className="absolute top-4 right-4 bg-lime-600/90 backdrop-blur-sm text-white px-4 py-1.5 rounded-full z-10 text-sm font-medium">
+            <div
+                className={`absolute top-4 right-4 ${getBadgeClass()} backdrop-blur-sm text-white px-4 py-1.5 rounded-full z-10 text-sm font-medium`}
+            >
                 {badge}
             </div>
 

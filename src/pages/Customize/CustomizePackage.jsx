@@ -152,19 +152,27 @@ const CustomizePackage = () => {
     );
   };
 
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth' 
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-lime-50 pt-28">
       <div className="mx-auto container pb-14">
         <form
           onSubmit={() => handleSubmit}
-          className="bg-white rounded-3xl shadow-xl overflow-hidden"
+          className="bg-white rounded-3xl shadow-md overflow-hidden"
         >
           {/* Header Section */}
-          <div className="bg-lime-500 px-6 py-8">
-            <h1 className="text-3xl font-bold text-white text-center">
+          <div className="border border-lime-400 text-lime-600 rounded-3xl p-6 shadow-md">
+            <h1 className="text-lime-600 text-3xl font-bold text-center">
               Customize Your Umrah Package
             </h1>
-            <p className="text-emerald-50 text-center mt-2">
+            <p className="text-lime-500 text-center mt-2">
               Create your perfect spiritual journey with our customizable packages
             </p>
           </div>

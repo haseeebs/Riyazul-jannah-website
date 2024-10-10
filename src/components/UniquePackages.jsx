@@ -59,7 +59,11 @@ const UniquePackages = () => {
                             packageId={pkg.$id}
                             badge={pkg.type}
                             image={pkg.image && packageServices.getOptimizedFilePreview(pkg.image)}
-                            title={`${pkg.type} Package ${pkg.travelDate ? ` - ${pkg.travelDate}` : ''}`}
+                            title={`${pkg.type} Package ${pkg.travelDate ? ` - ${new Date(pkg.travelDate).toLocaleDateString('en-IN', { 
+                                day: '2-digit',
+                                month: 'short', 
+                                year: 'numeric' 
+                              })}` : ''}`}
                             price={`₹${pkg.durations[0]?.basePrice?.toLocaleString() || '0'}`}
                             makkahLocation={`Makkah - ${getHotelName(pkg.makkahHotelId)}`}
                             madinahLocation={`Madinah - ${getHotelName(pkg.madinahHotelId)}`}

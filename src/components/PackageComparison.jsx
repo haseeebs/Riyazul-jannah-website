@@ -6,8 +6,8 @@ import { ChevronDown } from "lucide-react";
 const PackageComparison = () => {
   const navigate = useNavigate();
   const { packages, hotels } = useSelector((store) => store.package);
-  const [selectedDays, setSelectedDays] = useState(15);
-  const [selectedRoomType, setSelectedRoomType] = useState("quad");
+  const [selectedDays, setSelectedDays] = useState(null);
+  const [selectedRoomType, setSelectedRoomType] = useState(null);
   const [availableDurations, setAvailableDurations] = useState([]);
 
   const roomTypes = [
@@ -20,22 +20,43 @@ const PackageComparison = () => {
     navigate(`/packages/${packageId}`);
   };
 
-  // Filter and sort packages based on selected duration and room type
-  const filteredAndSortedPackages = packages
-    ?.filter((pkg) =>
-      pkg.durations.some((duration) => duration.days === selectedDays)
-    )
-    .sort((a, b) => {
-      const getPriceForA = a.durations
-        .find((duration) => duration.days === selectedDays)
-        ?.sharedRoomPrices[selectedRoomType] || Infinity;
+  // Modified filtering and sorting logic
+  const filteredAndSortedPackages = packages?.filter((pkg) => {
+    if (!selectedDays && !selectedRoomType) return true;
+    
+    if (selectedDays && !selectedRoomType) {
+      return pkg.durations.some((duration) => duration.days === selectedDays);
+    }
 
-      const getPriceForB = b.durations
-        .find((duration) => duration.days === selectedDays)
-        ?.sharedRoomPrices[selectedRoomType] || Infinity;
+    if (!selectedDays && selectedRoomType) {
+      return pkg.durations.some((duration) => 
+        duration.sharedRoomPrices[selectedRoomType] !== undefined
+      );
+    }
 
-      return getPriceForA - getPriceForB;
-    });
+    return pkg.durations.some(
+      (duration) => 
+        duration.days === selectedDays &&
+        duration.sharedRoomPrices[selectedRoomType] !== undefined
+    );
+  }).sort((a, b) => {
+    const durationA = selectedDays 
+      ? a.durations.find(d => d.days === selectedDays)
+      : a.durations[0];
+    const durationB = selectedDays 
+      ? b.durations.find(d => d.days === selectedDays)
+      : b.durations[0];
+
+    if (selectedRoomType) {
+      const priceA = durationA?.sharedRoomPrices[selectedRoomType] || Infinity;
+      const priceB = durationB?.sharedRoomPrices[selectedRoomType] || Infinity;
+      return priceA - priceB;
+    }
+
+    const basePriceA = durationA?.basePrice || Infinity;
+    const basePriceB = durationB?.basePrice || Infinity;
+    return basePriceA - basePriceB;
+  });
 
   useEffect(() => {
     const durations = [
@@ -47,13 +68,8 @@ const PackageComparison = () => {
     ].sort((a, b) => a - b);
 
     setAvailableDurations(durations);
-
-    if (durations.length > 0) {
-      setSelectedDays(durations[0]); // Automatically select the first duration
-    }
   }, [packages]);
 
-  // Check if packages or hotels are empty
   if (!packages || packages.length === 0) {
     return (
       <div className="mx-auto container bg-lime-400 px-4 py-4 rounded-3xl">
@@ -86,14 +102,15 @@ const PackageComparison = () => {
           {/* Duration Selection */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
-              Select Duration
+              Select Duration (Optional)
             </label>
             <div className="relative">
               <select
                 className="block w-full pl-4 pr-8 py-3 text-base border border-lime-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-lime-500 bg-white appearance-none"
-                value={selectedDays}
-                onChange={(e) => setSelectedDays(Number(e.target.value))}
+                value={selectedDays || ""}
+                onChange={(e) => setSelectedDays(e.target.value ? Number(e.target.value) : null)}
               >
+                <option value="">All Durations</option>
                 {availableDurations.map((days) => (
                   <option key={days} value={days}>
                     {days} Days Package
@@ -109,14 +126,15 @@ const PackageComparison = () => {
           {/* Room Type Selection */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
-              Select Room Type
+              Select Room Type (Optional)
             </label>
             <div className="relative">
               <select
                 className="block w-full pl-4 pr-8 py-3 text-base border border-lime-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-lime-500 bg-white appearance-none"
-                value={selectedRoomType}
-                onChange={(e) => setSelectedRoomType(e.target.value)}
+                value={selectedRoomType || ""}
+                onChange={(e) => setSelectedRoomType(e.target.value || null)}
               >
+                <option value="">Base Price</option>
                 {roomTypes.map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
@@ -137,7 +155,7 @@ const PackageComparison = () => {
           <table className="w-full">
             <thead className="sticky top-0 bg-white z-10">
               <tr className="border-b border-lime-200">
-                {['Category', 'Price', 'Makkah Hotel', 'Madinah Hotel'].map((header) => (
+                {['Category', 'Duration', 'Price', 'Makkah Hotel', 'Madinah Hotel'].map((header) => (
                   <th key={header}
                     className="px-6 py-4 bg-lime-50 text-left text-sm font-semibold text-gray-900"
                   > {header}
@@ -147,12 +165,16 @@ const PackageComparison = () => {
             </thead>
             <tbody className="divide-y divide-lime-200">
               {filteredAndSortedPackages.map((pkg) => {
-                const matchingPackage = pkg.durations.find(
-                  (duration) => duration.days === selectedDays
-                );
+                const matchingPackage = selectedDays 
+                  ? pkg.durations.find((duration) => duration.days === selectedDays)
+                  : pkg.durations[0];
 
                 const makkahHotel = hotels.find((hotel) => hotel.$id === pkg.makkahHotelId);
                 const madinahHotel = hotels.find((hotel) => hotel.$id === pkg.madinahHotelId);
+
+                const price = selectedRoomType
+                  ? matchingPackage?.sharedRoomPrices[selectedRoomType]
+                  : matchingPackage?.basePrice;
 
                 return (
                   <tr
@@ -163,8 +185,11 @@ const PackageComparison = () => {
                     <td className="px-6 py-4 font-medium text-gray-900">
                       {pkg.type}
                     </td>
+                    <td className="px-6 py-4 font-medium text-gray-900">
+                      {matchingPackage?.days || "N/A"} Days
+                    </td>
                     <td className="px-6 py-4 text-lg font-semibold text-lime-600">
-                      ₹{matchingPackage?.sharedRoomPrices[selectedRoomType] || "N/A"} {/*Yahan par aaraha hai error */}
+                      ₹{price || "N/A"}
                     </td>
                     <td className="px-6 py-4">
                       <div className="space-y-1">

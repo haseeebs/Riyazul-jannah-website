@@ -379,9 +379,11 @@ const PackageForm = () => {
                     onChange={handleInputChange}
                     className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full cursor-pointer"
                   >
+                    <option value="Budget">Economy</option>
                     <option value="Budget">Budget</option>
                     <option value="Deluxe">Deluxe</option>
                     <option value="5-Star">5-Star</option>
+                    <option value="Ramzan">Ramzan</option>
                     <option value="Hajj">Hajj</option>
                   </select>
                 </div>

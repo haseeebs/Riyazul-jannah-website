@@ -15,11 +15,11 @@ const PackageSummary = ({ packageDetails, inclusions, commonInclusions }) => {
     return (
         <div className="bg-white rounded-b-3xl shadow-xl overflow-hidden">
             {/* Header */}
-            <div className="bg-lime-500 px-6 py-8">
-                <h2 className="text-2xl font-bold text-white text-center">
+            <div className="border-y-4 border-lime-400 px-6 py-8">
+                <h2 className="text-2xl font-bold text-lime-600 text-center">
                     Your Umrah Package Summary
                 </h2>
-                <p className="text-emerald-50 text-center mt-2">
+                <p className="text-lime-500 text-center mt-2">
                     Spiritual Journey Customized Just for You
                 </p>
             </div>

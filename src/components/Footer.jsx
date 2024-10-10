@@ -61,7 +61,7 @@ const Footer = () => {
 
     return (
         <>
-            <footer aria-labelledby="footer-heading" className="bg-lime-400">
+            <footer aria-labelledby="footer-heading" className="border border-lime-400 text-lime-800 rounded-t-3xl p-6">
                 <h2 id="footer-heading" className="sr-only">
                     Footer
                 </h2>
@@ -74,21 +74,21 @@ const Footer = () => {
                                 src={Logo}
                                 className="h-10 w-auto"
                             />
-                            <p className="text-sm leading-6 text-lime-800">
+                            <p className="text-sm leading-6">
                                 Your trusted travel partner since 2014. Led by an Islamic scholar who speaks Arabic and English. We have helped 1000+ happy travelers plan their holy journeys. 10 years of making your sacred trips comfortable and worry-free.
                             </p>
                             <div className="space-y-3">
-                                <p className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300 cursor-default">
-                                    <span className="font-bold text-lime-800">Write to us:</span> Riyazuljannahtour@gmail.com
+                                <p className="text-sm leading-6 hover:text-lime-600 transition-colors duration-300 cursor-default">
+                                    <span className="font-bold ">Write to us:</span> Riyazuljannahtour@gmail.com
                                 </p>
-                                <p className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300 cursor-default">
-                                    <span className="font-bold text-lime-800">Call us:</span> +91 9179664894
+                                <p className="text-sm leading-6 hover:text-lime-600 transition-colors duration-300 cursor-default">
+                                    <span className="font-bold ">Call us:</span> +91 9179664894
                                 </p>
                             </div>
 
                             <div className="flex space-x-6">
                                 {navigation.social.map((item) => (
-                                    <a key={item.name} href={item.href} target={item.target} className="text-lime-800 hover:text-white transition-colors duration-300">
+                                    <a key={item.name} href={item.href} target={item.target} className="hover:text-lime-600 transition-colors duration-300">
                                         <span className="sr-only">{item.name}</span>
                                         <item.icon aria-hidden="true" className="h-6 w-6" />
                                     </a>
@@ -104,7 +104,7 @@ const Footer = () => {
                                     <ul role="list" className="mt-6 space-y-4">
                                         {navigation.solutions.map((item) => (
                                             <li key={item.name}>
-                                                <a href={item.href} className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300">
+                                                <a href={item.href} className="text-sm leading-6 hover:text-lime-600 transition-colors duration-300">
                                                     {item.name}
                                                 </a>
                                             </li>
@@ -119,7 +119,7 @@ const Footer = () => {
                                                 <a 
                                                     href={item.href} 
                                                     onClick={(event) => handleServiceClick(item)} 
-                                                    className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300"
+                                                    className="text-sm leading-6 hover:text-lime-600 transition-colors duration-300"
                                                 >
                                                     {item.name}
                                                 </a>
