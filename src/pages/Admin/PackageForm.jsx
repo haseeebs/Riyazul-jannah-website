@@ -13,10 +13,10 @@ const PackageForm = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { packages } = useSelector(store => store.package);
+  const { packages } = useSelector((store) => store.package);
 
   const [activeTab, setActiveTab] = useState(0);
-  const { hotels, loading } = useSelector(store => store.package);
+  const { hotels, loading } = useSelector((store) => store.package);
   const tabs = ["Basic Info", "Pricing & Duration", "Package Details"];
 
   // Form state
@@ -40,7 +40,7 @@ const PackageForm = () => {
   useEffect(() => {
     // If editing, fetch and populate form data
     if (isEditing && id) {
-      const currentPackage = packages.find(pkg => pkg.$id === id);
+      const currentPackage = packages.find((pkg) => pkg.$id === id);
       if (currentPackage) {
         setFormData({
           type: currentPackage.type,
@@ -50,15 +50,15 @@ const PackageForm = () => {
           inclusions: currentPackage.inclusions,
           exclusions: currentPackage.exclusions,
           image: currentPackage.image,
-          travelDate: currentPackage.travelDate
+          travelDate: currentPackage.travelDate,
         });
       }
     }
   }, [isEditing, id, packages]);
 
   // Filter hotels by city
-  const makkahHotels = hotels.filter(hotel => hotel?.city === "Makkah");
-  const madinahHotels = hotels.filter(hotel => hotel?.city === "Madinah");
+  const makkahHotels = hotels.filter((hotel) => hotel?.city === "Makkah");
+  const madinahHotels = hotels.filter((hotel) => hotel?.city === "Madinah");
 
   // Selected hotels state for displaying details
   const [selectedMakkahHotel, setSelectedMakkahHotel] = useState(null);
@@ -69,14 +69,18 @@ const PackageForm = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.makkahHotelId) newErrors.makkahHotelId = "Makkah hotel is required";
-    if (!formData.madinahHotelId) newErrors.madinahHotelId = "Madinah hotel is required";
+    if (!formData.makkahHotelId)
+      newErrors.makkahHotelId = "Makkah hotel is required";
+    if (!formData.madinahHotelId)
+      newErrors.madinahHotelId = "Madinah hotel is required";
     if (!formData.image) newErrors.image = "Package image is required";
     // if (!formData.travelDate) newErrors.travelDate = "Travel date is required";
 
     formData.durations.forEach((duration, index) => {
-      if (!duration.days) newErrors[`duration${index}Days`] = "Days are required";
-      if (!duration.basePrice) newErrors[`duration${index}BasePrice`] = "Base price is required";
+      if (!duration.days)
+        newErrors[`duration${index}Days`] = "Days are required";
+      if (!duration.basePrice)
+        newErrors[`duration${index}BasePrice`] = "Base price is required";
     });
 
     setErrors(newErrors);
@@ -92,27 +96,38 @@ const PackageForm = () => {
 
     // Update selected hotel details
     if (name === "makkahHotelId") {
-      const hotel = hotels.find(h => h.$id.toString() === value);
+      const hotel = hotels.find((h) => h.$id.toString() === value);
       setSelectedMakkahHotel(hotel);
     }
     if (name === "madinahHotelId") {
-      const hotel = hotels.find(h => h.$id.toString() === value);
+      const hotel = hotels.find((h) => h.$id.toString() === value);
       setSelectedMadinahHotel(hotel);
     }
   };
 
+  const toNumberOrEmpty = (val) => (val === "" ? "" : Number(val));
+
   const handleDurationChange = (index, field, value) => {
-    const newDurations = [...formData.durations];
-    if (field.includes('.')) {
-      const [parent, child] = field.split('.');
-      newDurations[index][parent][child] = Number(value);
-    } else {
-      newDurations[index][field] = Number(value);
-    }
-    setFormData((prev) => ({
-      ...prev,
-      durations: newDurations,
-    }));
+    setFormData((prev) => {
+      const updatedDurations = prev.durations.map((duration, i) => {
+        if (i !== index) return duration;
+
+        if (field.includes(".")) {
+          const [parent, child] = field.split(".");
+          return {
+            ...duration,
+            [parent]: {
+              ...duration[parent],
+              [child]: toNumberOrEmpty(value),
+            },
+          };
+        }
+
+        return { ...duration, [field]: toNumberOrEmpty(value) };
+      });
+
+      return { ...prev, durations: updatedDurations };
+    });
   };
 
   const handleAddDuration = () => {
@@ -172,10 +187,10 @@ const PackageForm = () => {
         const oldImage = formData.image;
         const response = await packageServices.fileUpload(file);
         if (response) {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             oldImage: oldImage,
-            image: response.$id
+            image: response.$id,
           }));
         }
       }
@@ -190,9 +205,9 @@ const PackageForm = () => {
       if (formData.image) {
         await packageServices.deleteFile(formData.image);
 
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          image: ""
+          image: "",
         }));
       }
     } catch (error) {
@@ -202,15 +217,15 @@ const PackageForm = () => {
 
   const handleUpdatePackage = async (packageId, updatedData) => {
     // Create a promise-based toast for loading state
-    const loadingToast = toast.loading('Updating package...');
+    const loadingToast = toast.loading("Updating package...");
 
     try {
       if (updatedData.oldImage) {
         const result = await packageServices.deleteFile(updatedData.oldImage);
-        if(result){
-          toast.success("Old image deleted successfully")
+        if (result) {
+          toast.success("Old image deleted successfully");
         } else {
-          toast.error("Error deleting old file...")
+          toast.error("Error deleting old file...");
         }
       }
 
@@ -219,17 +234,21 @@ const PackageForm = () => {
         type: updatedData.type,
         makkahHotelId: updatedData.makkahHotelId,
         madinahHotelId: updatedData.madinahHotelId,
-        durations: updatedData.durations.map(duration => JSON.stringify(duration)),
-        inclusions: updatedData.inclusions.map(inclusion =>
-          JSON.stringify({ description: inclusion })),
-        exclusions: updatedData.exclusions.map(exclusion =>
-          JSON.stringify({ description: exclusion })),
+        durations: updatedData.durations.map((duration) =>
+          JSON.stringify(duration)
+        ),
+        inclusions: updatedData.inclusions.map((inclusion) =>
+          JSON.stringify({ description: inclusion })
+        ),
+        exclusions: updatedData.exclusions.map((exclusion) =>
+          JSON.stringify({ description: exclusion })
+        ),
         image: updatedData.image,
-        travelDate: updatedData.travelDate
+        travelDate: updatedData.travelDate,
       };
 
       await packageServices.updatePackage(packageId, formattedData);
-      
+
       // Fetch updated packages and update Redux store
       const packagesResponse = await packageServices.fetchPackages();
       const parsedPackages = parsePackages(packagesResponse);
@@ -237,18 +256,18 @@ const PackageForm = () => {
 
       // Dismiss loading toast and show success
       toast.dismiss(loadingToast);
-      toast.success('Package updated successfully', {
+      toast.success("Package updated successfully", {
         duration: 3000,
-        position: 'top-right'
+        position: "top-right",
       });
-      navigate('/packages');
+      navigate("/packages");
     } catch (error) {
-      console.error('Error updating package:', error);
+      console.error("Error updating package:", error);
       // Dismiss loading toast and show error
       toast.dismiss(loadingToast);
       toast.error(`Failed to update package: ${error.message}`, {
         duration: 4000,
-        position: 'top-right'
+        position: "top-right",
       });
     }
   };
@@ -263,17 +282,23 @@ const PackageForm = () => {
           await handleUpdatePackage(id, formData);
         } else {
           // Show loading toast before the async operation
-          loadingToast = toast.loading('Creating package...');
+          loadingToast = toast.loading("Creating package...");
 
           const formattedData = {
             type: formData.type,
             makkahHotelId: formData.makkahHotelId,
             madinahHotelId: formData.madinahHotelId,
-            durations: formData.durations.map(duration => JSON.stringify(duration)),
-            inclusions: formData.inclusions.map(inclusion => JSON.stringify({ description: inclusion })),
-            exclusions: formData.exclusions.map(exclusion => JSON.stringify({ description: exclusion })),
+            durations: formData.durations.map((duration) =>
+              JSON.stringify(duration)
+            ),
+            inclusions: formData.inclusions.map((inclusion) =>
+              JSON.stringify({ description: inclusion })
+            ),
+            exclusions: formData.exclusions.map((exclusion) =>
+              JSON.stringify({ description: exclusion })
+            ),
             image: formData.image,
-            travelDate: formData.travelDate
+            travelDate: formData.travelDate,
           };
 
           await packageServices.addPackage(formattedData);
@@ -284,10 +309,10 @@ const PackageForm = () => {
 
           // Dismiss loading toast and show success
           toast.dismiss(loadingToast);
-          toast.success('Package created successfully');
+          toast.success("Package created successfully");
 
           // Optional: Reset form or navigate
-          navigate('/packages');
+          navigate("/packages");
         }
       } catch (error) {
         // Always check if loadingToast exists before dismissing
@@ -298,18 +323,26 @@ const PackageForm = () => {
         console.error("Error creating/updating package:", error);
 
         // More detailed error handling
-        const errorMessage = error.response?.message || error.message || 'An unexpected error occurred';
+        const errorMessage =
+          error.response?.message ||
+          error.message ||
+          "An unexpected error occurred";
 
-        toast.error(`Failed to ${isEditing ? 'update' : 'create'} package: ${errorMessage}`, {
-          duration: 4000,
-          position: 'top-right'
-        });
+        toast.error(
+          `Failed to ${
+            isEditing ? "update" : "create"
+          } package: ${errorMessage}`,
+          {
+            duration: 4000,
+            position: "top-right",
+          }
+        );
       }
     }
   };
 
   if (loading || !hotels) {
-    return <PackageFormSkeleton />
+    return <PackageFormSkeleton />;
   }
 
   return (
@@ -330,7 +363,9 @@ const PackageForm = () => {
                 <button
                   key={tab}
                   type="button"
-                  className={`rounded-lg py-2 ${activeTab === index ? "bg-lime-500 text-white" : ""}`}
+                  className={`rounded-lg py-2 ${
+                    activeTab === index ? "bg-lime-500 text-white" : ""
+                  }`}
                   onClick={() => setActiveTab(index)}
                 >
                   {tab}
@@ -347,8 +382,9 @@ const PackageForm = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleImageUpload}
-                    className={`rounded-xl p-4 border ${errors.image ? "border-red-500" : "border-lime-200"
-                      } focus:ring-lime-500 w-full`}
+                    className={`rounded-xl p-4 border ${
+                      errors.image ? "border-red-500" : "border-lime-200"
+                    } focus:ring-lime-500 w-full`}
                   />
                   {errors.image && (
                     <p className="text-red-500 text-sm mt-1">{errors.image}</p>
@@ -356,7 +392,9 @@ const PackageForm = () => {
                   {formData.image && (
                     <div className="mt-2">
                       <img
-                        src={packageServices.getOptimizedFilePreview(formData.image)}
+                        src={packageServices.getOptimizedFilePreview(
+                          formData.image
+                        )}
                         alt="Package preview"
                         className="w-40 h-40 object-cover rounded-lg"
                       />
@@ -364,7 +402,6 @@ const PackageForm = () => {
                         type="button"
                         onClick={handleRemoveImage}
                         className="text-red-500 hover:bg-red-50 px-2 py-1 rounded"
-
                       >
                         Remove image
                       </button>
@@ -392,31 +429,47 @@ const PackageForm = () => {
                   {/* Makkah Hotel Selection */}
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-lime-700">Makkah Hotel *</label>
+                      <label className="block text-lime-700">
+                        Makkah Hotel *
+                      </label>
                       <select
                         name="makkahHotelId"
                         value={formData.makkahHotelId}
                         onChange={handleInputChange}
-                        className={`rounded-xl p-4 border ${errors.makkahHotelId ? "border-red-500" : "border-lime-200"} focus:ring-lime-500 w-full cursor-pointer`}
+                        className={`rounded-xl p-4 border ${
+                          errors.makkahHotelId
+                            ? "border-red-500"
+                            : "border-lime-200"
+                        } focus:ring-lime-500 w-full cursor-pointer`}
                       >
                         <option value="">Select Makkah Hotel</option>
-                        {makkahHotels.map(hotel => (
+                        {makkahHotels.map((hotel) => (
                           <option key={hotel.$id} value={hotel.$id}>
                             {hotel.name} - {hotel.category}
                           </option>
                         ))}
                       </select>
                       {errors.makkahHotelId && (
-                        <p className="text-red-500 text-sm mt-1">{errors.makkahHotelId}</p>
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.makkahHotelId}
+                        </p>
                       )}
                     </div>
 
                     {selectedMakkahHotel && (
                       <div className="bg-lime-50 p-4 rounded-xl">
-                        <h4 className="font-medium text-lime-800">{selectedMakkahHotel.name}</h4>
-                        <p className="text-sm text-lime-600">Distance: {selectedMakkahHotel.distance}</p>
-                        <p className="text-sm text-lime-600">Walking Time: {selectedMakkahHotel.walkingTime}</p>
-                        <p className="text-sm text-lime-600">Transport: {selectedMakkahHotel.transport}</p>
+                        <h4 className="font-medium text-lime-800">
+                          {selectedMakkahHotel.name}
+                        </h4>
+                        <p className="text-sm text-lime-600">
+                          Distance: {selectedMakkahHotel.distance}
+                        </p>
+                        <p className="text-sm text-lime-600">
+                          Walking Time: {selectedMakkahHotel.walkingTime}
+                        </p>
+                        <p className="text-sm text-lime-600">
+                          Transport: {selectedMakkahHotel.transport}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -424,42 +477,60 @@ const PackageForm = () => {
                   {/* Madinah Hotel Selection */}
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-lime-700">Madinah Hotel *</label>
+                      <label className="block text-lime-700">
+                        Madinah Hotel *
+                      </label>
                       <select
                         name="madinahHotelId"
                         value={formData.madinahHotelId}
                         onChange={handleInputChange}
-                        className={`rounded-xl p-4 border ${errors.madinahHotelId ? "border-red-500" : "border-lime-200"} focus:ring-lime-500 w-full cursor-pointer`}
+                        className={`rounded-xl p-4 border ${
+                          errors.madinahHotelId
+                            ? "border-red-500"
+                            : "border-lime-200"
+                        } focus:ring-lime-500 w-full cursor-pointer`}
                       >
                         <option value="">Select Madinah Hotel</option>
-                        {madinahHotels.map(hotel => (
+                        {madinahHotels.map((hotel) => (
                           <option key={hotel.$id} value={hotel.$id}>
                             {hotel.name} - {hotel.category}
                           </option>
                         ))}
                       </select>
                       {errors.madinahHotelId && (
-                        <p className="text-red-500 text-sm mt-1">{errors.madinahHotelId}</p>
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.madinahHotelId}
+                        </p>
                       )}
                     </div>
 
                     {selectedMadinahHotel && (
                       <div className="bg-lime-50 p-4 rounded-xl">
-                        <h4 className="font-medium text-lime-800">{selectedMadinahHotel.name}</h4>
-                        <p className="text-sm text-lime-600">Distance: {selectedMadinahHotel.distance}</p>
-                        <p className="text-sm text-lime-600">Walking Time: {selectedMadinahHotel.walkingTime}</p>
-                        <p className="text-sm text-lime-600">Transport: {selectedMadinahHotel.transport}</p>
+                        <h4 className="font-medium text-lime-800">
+                          {selectedMadinahHotel.name}
+                        </h4>
+                        <p className="text-sm text-lime-600">
+                          Distance: {selectedMadinahHotel.distance}
+                        </p>
+                        <p className="text-sm text-lime-600">
+                          Walking Time: {selectedMadinahHotel.walkingTime}
+                        </p>
+                        <p className="text-sm text-lime-600">
+                          Transport: {selectedMadinahHotel.transport}
+                        </p>
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-lime-700">Travel Date (optional)</label>
+                  <label className="block text-lime-700">
+                    Travel Date (optional)
+                  </label>
                   <input
                     name="travelDate"
                     type="date"
-                    value={formData.travelDate || ''}
+                    value={formData.travelDate || ""}
                     onChange={handleInputChange}
                     className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full cursor-pointer"
                   />
@@ -491,7 +562,9 @@ const PackageForm = () => {
 
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
-                        <label className="block text-lime-700">Number of Days *</label>
+                        <label className="block text-lime-700">
+                          Number of Days *
+                        </label>
                         <input
                           type="number"
                           value={duration.days}
@@ -503,12 +576,18 @@ const PackageForm = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-lime-700">Base Price (₹) *</label>
+                        <label className="block text-lime-700">
+                          Base Price (₹) *
+                        </label>
                         <input
                           type="number"
                           value={duration.basePrice}
                           onChange={(e) =>
-                            handleDurationChange(index, "basePrice", e.target.value)
+                            handleDurationChange(
+                              index,
+                              "basePrice",
+                              e.target.value
+                            )
                           }
                           className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full"
                           min="0"
@@ -518,7 +597,9 @@ const PackageForm = () => {
 
                     <div className="grid gap-4 md:grid-cols-3">
                       <div>
-                        <label className="block text-lime-700">Quad Room Price (₹)</label>
+                        <label className="block text-lime-700">
+                          Quad Room Price (₹)
+                        </label>
                         <input
                           type="number"
                           value={duration.sharedRoomPrices.quad}
@@ -534,7 +615,9 @@ const PackageForm = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-lime-700">Triple Room Price (₹)</label>
+                        <label className="block text-lime-700">
+                          Triple Room Price (₹)
+                        </label>
                         <input
                           type="number"
                           value={duration.sharedRoomPrices.triple}
@@ -550,7 +633,9 @@ const PackageForm = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-lime-700">Double Room Price (₹)</label>
+                        <label className="block text-lime-700">
+                          Double Room Price (₹)
+                        </label>
                         <input
                           type="number"
                           value={duration.sharedRoomPrices.double}
@@ -661,10 +746,11 @@ const PackageForm = () => {
             <button
               type="button"
               onClick={() => setActiveTab(Math.max(0, activeTab - 1))}
-              className={`px-4 py-2 rounded-xl ${activeTab === 0
-                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-lime-100 text-lime-700 hover:bg-lime-200"
-                }`}
+              className={`px-4 py-2 rounded-xl ${
+                activeTab === 0
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-lime-100 text-lime-700 hover:bg-lime-200"
+              }`}
               disabled={activeTab === 0}
             >
               Previous
