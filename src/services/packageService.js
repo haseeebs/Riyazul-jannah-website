@@ -109,7 +109,7 @@ class PackageServices {
     // Get file preview URL
     getFilePreview(fileId) {
         try {
-            return this.storage.getFilePreview(
+            return this.storage.getFileView(
                 config.bucketId,
                 fileId,
             );
@@ -283,12 +283,12 @@ class PackageServices {
                 access_token: config.instagramAccessToken,
                 fields: 'media_url,media_type,caption,thumbnail_url',
                 limit,
-              };
-              
-              if (nextCursor) params.after = nextCursor;
+            };
 
-              const response = await axios.get('https://graph.instagram.com/me/media', { params });
-            
+            if (nextCursor) params.after = nextCursor;
+
+            const response = await axios.get('https://graph.instagram.com/me/media', { params });
+
             return {
                 items: response.data.data,
                 nextCursor: response.data.paging
